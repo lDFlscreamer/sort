@@ -4,10 +4,10 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Generator {
 
-	public static List<Integer> generate(int size) {
-		ArrayList<Integer> numbers = new ArrayList<>();
+	public static int[] generate(int size) {
+		int[] numbers = new int[size];
 		for (int i = 0; i < size; i++) {
-			numbers.add(ThreadLocalRandom.current().nextInt(10));
+			numbers[i]=ThreadLocalRandom.current().nextInt(10);
 		}
 		return numbers;
 	}

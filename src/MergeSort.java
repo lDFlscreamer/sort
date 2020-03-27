@@ -1,41 +1,44 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 public class MergeSort {
 
-	public List<Integer> sort(List<Integer> toSort){
-		if(toSort.size()<=1){
-			return toSort;
-		}
-		ArrayList<Integer> result = new ArrayList<>();
-		int subListSize = toSort.size() / 2;
-		List<Integer> leftList = sort(toSort.subList(0, subListSize));
-		List<Integer> rightList = sort(toSort.subList(subListSize, toSort.size()));
-		int leftSize = leftList.size();
-		int rightSize = rightList.size();
-		int i=0;
-		int j=0;
-
-		for (int k = 0; k < leftSize + rightSize; k++) {
-			if (i < leftSize && j < rightSize) {
-				if (leftList.get(i) < rightList.get(j)) {
-					result.add(leftList.get(i));
-					i++;
-				} else {
-					result.add(rightList.get(j));
-					j++;
-				}
-			} else if (i < leftSize) {
-				result.add(leftList.get(i));
-				i++;
-			} else if (j < rightSize) {
-				result.add(rightList.get(j));
-				j++;
-			}
-		}
-
-		return result;
-
+	public void sort(int[] array) {
+		mergeSort(array, 0, array.length - 1);
 	}
 
+	void mergeSort(int[] array, int from, int to) {
+		if (from < to) {
+			int middle = from + ((to - from) / 2);
+			mergeSort(array, from, middle);
+			mergeSort(array, middle + 1, to);
+			merge(array, from, middle, to);
+		}
+	}
+
+	void merge(int[] array, int from, int middle, int to) {
+		int[] left = Arrays.copyOfRange(array, from, middle + 1);
+		int[] right = Arrays.copyOfRange(array, middle + 1, to + 1);
+
+		int leftIndex = 0,
+				rightIndex = 0;
+
+		for (int i = from; i < to+1; i++) {
+
+			if (leftIndex < left.length && rightIndex < right.length) {
+				if (left[leftIndex] < right[rightIndex]) {
+					array[i] = left[leftIndex];
+					leftIndex++;
+				} else {
+					array[i] = right[rightIndex];
+					rightIndex++;
+				}
+			} else if (leftIndex < left.length) {
+				array[i] = left[leftIndex];
+				leftIndex++;
+			} else if (rightIndex < right.length) {
+				array[i] = right[rightIndex];
+				rightIndex++;
+			}
+		}
+	}
 }
