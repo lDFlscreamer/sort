@@ -2,10 +2,6 @@ import java.util.Arrays;
 
 public class MergeSort {
 
-	public void sort(int[] array) {
-		mergeSort(array, 0, array.length - 1);
-	}
-
 	void mergeSort(int[] array, int from, int to) {
 		if (from < to) {
 			int middle = from + ((to - from) / 2);

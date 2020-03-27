@@ -1,22 +1,14 @@
-import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ForkJoinPool;
 
 public class Main {
-	public static void main(String[] args) {
-		int size=1_000_000;
-		long serial = serial(size);
-		long parallel = parallel(size);
-		System.out.println("serial: \t\t\t\t"+ serial);
-		System.out.println("parallel: \t\t\t"+ parallel);
-	}
+	static int size = 1_000_000;
 
 	static long serial(int size) {
-		int[] generate=Generator.generate(size);
+		int[] generate = Generator.generate(size);
 //		System.out.println("generate = " + Arrays.toString(generate));
-		MergeSort mergeSort=new MergeSort();
+		MergeSort mergeSort = new MergeSort();
 		long start = System.nanoTime();
-		mergeSort.sort(generate);
+		mergeSort.mergeSort(generate,0,generate.length-1);
 		long end = System.nanoTime();
 //		System.out.println("generate = " + Arrays.toString(generate));
 		return end - start;
@@ -28,9 +20,18 @@ public class Main {
 		ForkJoinPool forkJoinPool = new ForkJoinPool();
 
 		long start = System.nanoTime();
-		forkJoinPool.invoke(new ParallelMergeSort(generate));
+		forkJoinPool.invoke(new ParallelMergeSort(generate,0,generate.length-1));
 		long end = System.nanoTime();
 //		System.out.println("generate = " + Arrays.toString(generate));
 		return end - start;
 	}
+
+	public static void main(String[] args) {
+		long serial = serial(size);
+		long parallel = parallel(size);
+		System.out.println("serial  time : \t\t\t\t" + serial);
+		System.out.println("parallel time: \t\t\t\t" + parallel);
+	}
+
+
 }
