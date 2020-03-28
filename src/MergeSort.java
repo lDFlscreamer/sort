@@ -2,39 +2,36 @@ import java.util.Arrays;
 
 public class MergeSort {
 
-	public static void mergeSort(int[] array, int from, int to) {
-		if (from < to) {
-			int middle = from + ((to - from) / 2);
-			mergeSort(array, from, middle);
-			mergeSort(array, middle + 1, to);
-			merge(array, from, middle, to);
-		}
-	}
+	public static void mergeSort(int[] array, int begin, int end) {
+		if (begin < end) {
+			int middle = begin + ((end - begin) / 2);
+			mergeSort(array, begin, middle);
+			mergeSort(array, middle + 1, end);
+			int[] leftPart = Arrays.copyOfRange(array, begin, middle + 1);
+			int[] rightPart = Arrays.copyOfRange(array, middle + 1, end + 1);
 
-	public static void merge(int[] array, int from, int middle, int to) {
-		int[] left = Arrays.copyOfRange(array, from, middle + 1);
-		int[] right = Arrays.copyOfRange(array, middle + 1, to + 1);
+			int leftIndex = 0;
+			int rightIndex = 0;
 
-		int leftIndex = 0,
-				rightIndex = 0;
+			for (int i = begin; i < end + 1; i++) {
 
-		for (int i = from; i < to+1; i++) {
-
-			if (leftIndex < left.length && rightIndex < right.length) {
-				if (left[leftIndex] < right[rightIndex]) {
-					array[i] = left[leftIndex];
+				if (leftIndex < leftPart.length && rightIndex < rightPart.length) {
+					if (leftPart[leftIndex] < rightPart[rightIndex]) {
+						array[i] = leftPart[leftIndex];
+						leftIndex++;
+					} else {
+						array[i] = rightPart[rightIndex];
+						rightIndex++;
+					}
+				} else if (leftIndex < leftPart.length) {
+					array[i] = leftPart[leftIndex];
 					leftIndex++;
-				} else {
-					array[i] = right[rightIndex];
+				} else if (rightIndex < rightPart.length) {
+					array[i] = rightPart[rightIndex];
 					rightIndex++;
 				}
-			} else if (leftIndex < left.length) {
-				array[i] = left[leftIndex];
-				leftIndex++;
-			} else if (rightIndex < right.length) {
-				array[i] = right[rightIndex];
-				rightIndex++;
 			}
 		}
 	}
+
 }

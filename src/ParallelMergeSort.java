@@ -6,37 +6,20 @@ public class ParallelMergeSort extends RecursiveAction {
 	private static final int SORT_THRESHOLD = 128;
 
 	private final int[] array;
-	private final int from;
-	private final int to;
+	private final int begin;
+	private final int end;
 
-	public ParallelMergeSort(int[] array, int from, int to) {
+	public ParallelMergeSort(int[] array, int begin, int end) {
 		this.array = array;
-		this.from = from;
-		this.to = to;
-	}
-
-
-	@Override
-	public void compute() {
-		if (from < to) {
-			int size = to - from;
-			if (size < SORT_THRESHOLD) {
-				insertionSort();
-			} else {
-				int mid = from + Math.floorDiv(size, 2);
-				invokeAll(
-						new ParallelMergeSort(array, from, mid),
-						new ParallelMergeSort(array, mid + 1, to));
-				merge(mid);
-			}
-		}
+		this.begin = begin;
+		this.end = end;
 	}
 
 	public void insertionSort() {
-		for (int i = from + 1; i <= to; ++i) {
+		for (int i = begin + 1; i <= end; ++i) {
 			int current = array[i];
 			int j = i - 1;
-			while (from <= j && current < array[j]) {
+			while (begin <= j && current < array[j]) {
 				array[j + 1] = array[j];
 				j--;
 			}
@@ -44,30 +27,41 @@ public class ParallelMergeSort extends RecursiveAction {
 		}
 	}
 
-	public void merge(int mid) {
-		int[] left = Arrays.copyOfRange(array, from, mid + 1);
-		int[] right = Arrays.copyOfRange(array, mid + 1, to + 1);
-		int f = from;
+	@Override
+	public void compute() {
+		if (begin < end) {
+			int size = end - begin;
+			if (size < SORT_THRESHOLD) {
+				insertionSort();
+			} else {
+				int middle = begin + Math.floorDiv(size, 2);
+				new ParallelMergeSort(array, begin, middle).invoke();
+				new ParallelMergeSort(array, middle + 1, end).invoke();
 
-		int leftIndex = 0,
-				rightIndex = 0;
+				int[] leftPart = Arrays.copyOfRange(array, begin, middle + 1);
+				int[] rightPart = Arrays.copyOfRange(array, middle + 1, end + 1);
 
-		for (int i = from; i < to; i++) {
+				int leftIndex = 0;
+				int rightIndex = 0;
 
-			if (leftIndex < left.length && rightIndex < right.length) {
-				if (left[leftIndex] <= right[rightIndex]) {
-					array[i] = left[leftIndex];
-					leftIndex++;
-				} else {
-					array[i] = right[rightIndex];
-					rightIndex++;
+				for (int i = begin; i < end; i++) {
+
+					if (leftIndex < leftPart.length && rightIndex < rightPart.length) {
+						if (leftPart[leftIndex] <= rightPart[rightIndex]) {
+							array[i] = leftPart[leftIndex];
+							leftIndex++;
+						} else {
+							array[i] = rightPart[rightIndex];
+							rightIndex++;
+						}
+					} else if (leftIndex < leftPart.length) {
+						array[i] = leftPart[leftIndex];
+						leftIndex++;
+					} else if (rightIndex < rightPart.length) {
+						array[i] = rightPart[rightIndex];
+						rightIndex++;
+					}
 				}
-			} else if (leftIndex < left.length) {
-				array[i] = left[leftIndex];
-				leftIndex++;
-			} else if (rightIndex < right.length) {
-				array[i] = right[rightIndex];
-				rightIndex++;
 			}
 		}
 	}
