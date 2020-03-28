@@ -17,10 +17,10 @@ public class ParallelMergeSort extends RecursiveAction {
 
 
 	@Override
-	protected void compute() {
+	public void compute() {
 		if (from < to) {
 			int size = to - from;
-			if (size < SORT_THRESHOLD) {
+			if (size < 2) {
 				insertionSort();
 			} else {
 				int mid = from + Math.floorDiv(size, 2);
@@ -32,18 +32,19 @@ public class ParallelMergeSort extends RecursiveAction {
 		}
 	}
 
-	private void insertionSort() {
+	public void insertionSort() {
 		for (int i = from + 1; i <= to; ++i) {
 			int current = array[i];
 			int j = i - 1;
 			while (from <= j && current < array[j]) {
-				array[j + 1] = array[j--];
+				array[j + 1] = array[j];
+				j--;
 			}
 			array[j + 1] = current;
 		}
 	}
 
-	private void merge(int mid) {
+	public void merge(int mid) {
 		int[] left = Arrays.copyOfRange(array, from, mid + 1);
 		int[] right = Arrays.copyOfRange(array, mid + 1, to + 1);
 		int f = from;

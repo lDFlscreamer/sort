@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 public class MergeSort {
 
-	void mergeSort(int[] array, int from, int to) {
+	public static void mergeSort(int[] array, int from, int to) {
 		if (from < to) {
 			int middle = from + ((to - from) / 2);
 			mergeSort(array, from, middle);
@@ -11,7 +11,7 @@ public class MergeSort {
 		}
 	}
 
-	void merge(int[] array, int from, int middle, int to) {
+	public static void merge(int[] array, int from, int middle, int to) {
 		int[] left = Arrays.copyOfRange(array, from, middle + 1);
 		int[] right = Arrays.copyOfRange(array, middle + 1, to + 1);
 
