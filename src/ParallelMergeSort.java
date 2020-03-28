@@ -20,7 +20,7 @@ public class ParallelMergeSort extends RecursiveAction {
 	public void compute() {
 		if (from < to) {
 			int size = to - from;
-			if (size < 2) {
+			if (SORT_THRESHOLD < 2) {
 				insertionSort();
 			} else {
 				int mid = from + Math.floorDiv(size, 2);
