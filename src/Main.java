@@ -43,7 +43,7 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		int[] arr = Generator.generate(20);
+		int[] arr = Generator.generate(size);
 		int[] arr2 = Arrays.copyOf(arr,arr.length);
 		System.out.println("Array = " + Arrays.toString(arr));
 		long serial = serial(arr);
