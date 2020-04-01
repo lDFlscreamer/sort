@@ -10,14 +10,14 @@ public class Main {
 		long start = System.nanoTime();
 		MergeSort.mergeSort(arr,0,arr.length-1);
 		long end = System.nanoTime();
-		System.out.println("Array after = " + Arrays.toString(arr));
+		System.out.println("Array after mergesort =\t\t " + Arrays.toString(arr));
 		return end - start;
 	}
 	static long serial(int[] arr) {
 		long start = System.nanoTime();
 		MergeSort.mergeSort(arr,0,arr.length-1);
 		long end = System.nanoTime();
-		System.out.println("Array after = " + Arrays.toString(arr));
+		System.out.println("Array after mergesort =\t\t " + Arrays.toString(arr));
 		return end - start;
 	}
 
@@ -29,7 +29,7 @@ public class Main {
 		long start = System.nanoTime();
 		forkJoinPool.invoke(new ParallelMergeSort(arr,0,arr.length-1));
 		long end = System.nanoTime();
-		System.out.println("Array after = " + Arrays.toString(arr));
+		System.out.println("Array after parallel mergesort =\t\t " + Arrays.toString(arr));
 		return end - start;
 	}
 	static long parallel(int[] arr) {
@@ -38,12 +38,12 @@ public class Main {
 		long start = System.nanoTime();
 		forkJoinPool.invoke(new ParallelMergeSort(arr,0,arr.length-1));
 		long end = System.nanoTime();
-		System.out.println("Array after = " + Arrays.toString(arr));
+		System.out.println("Array after parallel mergesort =\t\t " + Arrays.toString(arr));
 		return end - start;
 	}
 
 	public static void main(String[] args) {
-		int[] arr = Generator.generate(size);
+		int[] arr = new int[]{3,7,5,2,3,9,1};
 		int[] arr2 = Arrays.copyOf(arr,arr.length);
 		System.out.println("Array = " + Arrays.toString(arr));
 		long serial = serial(arr);
