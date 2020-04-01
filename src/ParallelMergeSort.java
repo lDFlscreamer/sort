@@ -15,24 +15,12 @@ public class ParallelMergeSort extends RecursiveAction {
 		this.end = end;
 	}
 
-	public void insertionSort() {
-		for (int i = begin + 1; i <= end; ++i) {
-			int current = array[i];
-			int j = i - 1;
-			while (begin <= j && current < array[j]) {
-				array[j + 1] = array[j];
-				j--;
-			}
-			array[j + 1] = current;
-		}
-	}
-
 	@Override
 	public void compute() {
 		if (begin < end) {
 			int size = end - begin;
 			if (size < maximumForSerialSort) {
-				insertionSort();
+				MergeSort.mergeSort(array,begin,end);
 			} else {
 				int middle = begin + Math.floorDiv(size, 2);
 				new ParallelMergeSort(array, begin, middle).invoke();
