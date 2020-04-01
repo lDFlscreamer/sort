@@ -3,7 +3,7 @@ import java.util.concurrent.RecursiveAction;
 
 public class ParallelMergeSort extends RecursiveAction {
 
-	private static final int SORT_THRESHOLD = 128;
+	private static final int maximumForSerialSort = 2;
 
 	private final int[] array;
 	private final int begin;
@@ -31,7 +31,7 @@ public class ParallelMergeSort extends RecursiveAction {
 	public void compute() {
 		if (begin < end) {
 			int size = end - begin;
-			if (size < SORT_THRESHOLD) {
+			if (size < maximumForSerialSort) {
 				insertionSort();
 			} else {
 				int middle = begin + Math.floorDiv(size, 2);
@@ -40,29 +40,27 @@ public class ParallelMergeSort extends RecursiveAction {
 
 				int[] leftPart = Arrays.copyOfRange(array, begin, middle + 1);
 				int[] rightPart = Arrays.copyOfRange(array, middle + 1, end + 1);
-
+				int resultIndex = begin;
 				int leftIndex = 0;
 				int rightIndex = 0;
 
-				for (int i = begin; i < end; i++) {
-
-					if (leftIndex < leftPart.length && rightIndex < rightPart.length) {
-						if (leftPart[leftIndex] <= rightPart[rightIndex]) {
-							array[i] = leftPart[leftIndex];
-							leftIndex++;
-						} else {
-							array[i] = rightPart[rightIndex];
-							rightIndex++;
-						}
-					} else if (leftIndex < leftPart.length) {
-						array[i] = leftPart[leftIndex];
-						leftIndex++;
-					} else if (rightIndex < rightPart.length) {
-						array[i] = rightPart[rightIndex];
-						rightIndex++;
+				while (leftIndex < leftPart.length && rightIndex < rightPart.length) {
+					if (leftPart[leftIndex] <= rightPart[rightIndex]) {
+						array[resultIndex++] = leftPart[leftIndex++];
+					} else {
+						array[resultIndex++] = rightPart[rightIndex++];
 					}
 				}
+				while (leftIndex < leftPart.length) {
+					array[resultIndex++] = leftPart[leftIndex++];
+				}
+				while (rightIndex < rightPart.length) {
+					array[resultIndex++] = rightPart[rightIndex++];
+				}
+
 			}
 		}
+
 	}
+
 }
